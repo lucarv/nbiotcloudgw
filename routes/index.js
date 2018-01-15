@@ -6,7 +6,7 @@ module.exports = router;
 var mqtt = require('mqtt')
 var mclient = mqtt.connect('mqtt://telenet-nbiot.westeurope.cloudapp.azure.com')
 var devices = require('./devices.json');
-var publisher;
+var publisher = 'unknown';
 
 // raw udp datagrams
 var dgram = require('dgram');
@@ -57,7 +57,7 @@ mclient.on('message', function (topic, message) {
 
             var hubMsg = new Message(msg)
             var aclient = clientFromConnectionString(cs);
-            lastRead = new Date().toISOString;
+            lastRead = new Date();
             aclient.sendEvent(hubMsg, function (err, res) {
                 if (err)
                     console.log('Message sending error: ' + err.toString());
