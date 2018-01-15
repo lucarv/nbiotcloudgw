@@ -5,7 +5,8 @@ module.exports = router;
 // mqtt without security
 var mqtt = require('mqtt')
 var mclient = mqtt.connect('mqtt://telenet-nbiot.westeurope.cloudapp.azure.com')
-var devices = require('./devices.json')
+var devices = require('./devices.json');
+var publisher;
 
 // raw udp datagrams
 var dgram = require('dgram');
@@ -25,11 +26,11 @@ var cs;
 
 var mqtt_msg_counter = 0;
 var udp_msg_counter = 0;
-var lastTemp = 'unknown';
+var lastRead = 'unknown';
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    res.render('index', { title: 'Express', last: lastTemp, mqtt: mqtt_msg_counter, udp: udp_msg_counter });
+    res.render('index', { title: 'Express', last: lastRead, mqtt: mqtt_msg_counter, pub: publisher });
 
 });
 
@@ -42,10 +43,13 @@ mclient.on('message', function (topic, message) {
     // message is Buffer
     mqtt_msg_counter++;
 
+    publisher = topic.split(/[.,\/ -]/)[1];
+    console.log('publisher: ' + publisher)
+
     var msg = message.toString();
     var tid = JSON.parse(msg).tid;
-    var timestamp = JSON.parse(msg).tst;
-    console.log('message from: ' + tid + ' at: ' + timestamp)
+    var timestamp = new Date(JSON.parse(msg).tst);
+    console.log('message from: ' + publisher + ' at: ' + timestamp)
 
     for (var i = 0; i < devices.length; i++) {
         if (devices[i].DeviceID === tid) {
@@ -53,7 +57,7 @@ mclient.on('message', function (topic, message) {
 
             var hubMsg = new Message(msg)
             var aclient = clientFromConnectionString(cs);
-
+            lastRead = new Date().toISOString;
             aclient.sendEvent(hubMsg, function (err, res) {
                 if (err)
                     console.log('Message sending error: ' + err.toString());
