@@ -30,7 +30,7 @@ var lastRead = 'unknown';
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    res.render('index', { title: 'Express', last: lastRead, mqtt: mqtt_msg_counter, pub: publisher });
+    res.render('index', { title: 'Simple NBIOT GW', last: lastRead, mqtt: mqtt_msg_counter, pub: publisher });
 
 });
 
