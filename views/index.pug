@@ -1,7 +1,9 @@
 extends layout
 
 block content
-  h1= title
-  p MQTT Message Counter: #{ mqtt }
-  p Last Publisher: #{ pub }
-  p LAST incoming: #{ last }
+  .panel.panel-default.panel-modest
+    .panel-heading #{title}
+    .panel-body    
+      p MQTT Message Counter: #{ mqtt }
+      p Last Publisher: #{ pub }
+      p LAST incoming: #{ last }

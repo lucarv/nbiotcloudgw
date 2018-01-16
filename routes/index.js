@@ -26,7 +26,7 @@ var cs;
 
 var mqtt_msg_counter = 0;
 var udp_msg_counter = 0;
-var lastRead = 'unknown';
+var lastHub = 'unknown';
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -57,13 +57,14 @@ mclient.on('message', function (topic, message) {
 
             var hubMsg = new Message(msg)
             var aclient = clientFromConnectionString(cs);
-            lastRead = new Date();
             aclient.sendEvent(hubMsg, function (err, res) {
-                if (err)
-                    console.log('Message sending error: ' + err.toString());
+                if (err) {
+                    lastHub = err.toString()
+                }
                 else {
-                    if (res)
-                        console.log('sent from: ' + tid + ' to hub: ' + JSON.stringify(hubMsg));
+                    if (res) {
+                        lastHub = new Date();
+                    }
                 }
             })
         }
