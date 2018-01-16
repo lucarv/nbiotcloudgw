@@ -21,6 +21,6 @@
     },
     {
         "DeviceID": "TC",
-        "cs": "HostName=Integration-Duga-IOT.azure-devices.net;DeviceId=Tayo;SharedAccessKey=dWpAEuKetRHgnPIaaYxv0qIIbVRFOJfWQXUEwOzgRqQ="
+        "cs": "HostName=luca-cws-iothub.azure-devices.net;DeviceId=pypaho;SharedAccessKey=WVAdyXaHmyqwXxIhNrbwKpvYiIAgyqQC9Om31s7Ew+s="
     }
 ]

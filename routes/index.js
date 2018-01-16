@@ -23,6 +23,14 @@ var Client = require('azure-iot-device').Client;
 var Protocol = require('azure-iot-device-mqtt').Mqtt;
 // hardcode device for now
 var cs;
+var clients = [];
+for (var i = 0; i < devices.length; i++) {
+        cs = devices[i].cs
+        console.log('device:' + devices[i].DeviceID)
+        var client = clientFromConnectionString(cs);
+        clients.push({"DeviceID": devices[i].DeviceID, "client": client})
+}
+  
 
 var mqtt_msg_counter = 0;
 var udp_msg_counter = 0;
@@ -45,26 +53,27 @@ mclient.on('message', function (topic, message) {
 
     publisher = topic.split(/[.,\/ -]/)[1];
     console.log('publisher: ' + publisher)
-    console.log('tid: ' + JSON.parse(msg).tst)
 
     var msg = message.toString();
     var tid = JSON.parse(msg).tid;
     var timestamp = new Date(JSON.parse(msg).tst);
-    console.log('message from: ' + publisher + ' at: ' + timestamp)
+    console.log('message from: ' + tid + ' at: ' + timestamp)
 
-    for (var i = 0; i < devices.length; i++) {
-        if (devices[i].DeviceID === tid) {
-            cs = devices[i].cs
-
+    for (var i = 0; i < clients.length; i++) { 
+        if (clients[i].DeviceID === tid) {  // choose client to send
+            var mclient = clients[i].client;
             var hubMsg = new Message(msg)
-            var aclient = clientFromConnectionString(cs);
-            aclient.sendEvent(hubMsg, function (err, res) {
+
+            mclient.sendEvent(hubMsg, function (err, res) {
                 if (err) {
+                    console.log('error sending')
                     lastHub = 'some iot hub error: ' + err.toString()
                 }
                 else {
                     if (res) {
                         lastHub = new Date();
+                        console.log('sent at: ' + lastHub)
+                        console.log('result: ' + JSON.stringify(res))
                     }
                 }
             })
