@@ -59,7 +59,7 @@ mclient.on('message', function (topic, message) {
             var aclient = clientFromConnectionString(cs);
             aclient.sendEvent(hubMsg, function (err, res) {
                 if (err) {
-                    lastHub = err.toString()
+                    lastHub = 'some iot hub error: ' + err.toString()
                 }
                 else {
                     if (res) {
