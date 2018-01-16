@@ -45,6 +45,7 @@ mclient.on('message', function (topic, message) {
 
     publisher = topic.split(/[.,\/ -]/)[1];
     console.log('publisher: ' + publisher)
+    console.log('tid: ' + JSON.parse(msg).tst)
 
     var msg = message.toString();
     var tid = JSON.parse(msg).tid;
