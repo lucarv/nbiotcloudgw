@@ -30,7 +30,7 @@ var lastHub = 'unknown';
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    res.render('index', { title: 'Simple NBIOT GW', last: lastRead, mqtt: mqtt_msg_counter, pub: publisher });
+    res.render('index', { title: 'Simple NBIOT GW', last: lastHub, mqtt: mqtt_msg_counter, pub: publisher });
 
 });
 
